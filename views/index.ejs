@@ -2,17 +2,16 @@
 <!-- ______^partial header^______navbar location____________________________-->
 
 
-<% blogs.forEach(function(blog){ %>
-   <div>
-       <h2><%= blog.title %></h2>
-       <img src="<%= blog.image %>">
-       <span><%= blog.created %></span>
-       <p><%= blog.body %></p>
-   </div>
-<% }) %>
-
-
-
+<!-- _______________________all posted blogs_______________________________ -->
+    <% blogs.forEach(function(blog){ %>
+       <div>
+           <h2><%= blog.title %></h2>
+           <img src="<%= blog.image %>">
+           <span><%= blog.created %></span>
+           <p><%= blog.body %></p>
+       </div>
+    <% }) %>
+<!-- _______________________all posted blogs_______________________________ -->
 
 
 
