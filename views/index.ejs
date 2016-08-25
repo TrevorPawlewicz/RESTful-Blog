@@ -1,16 +1,20 @@
-<% include ./partials/header %> <!-- to include partials header -->
+<% include ./partials/header %>
 <!-- ______^partial header^______navbar location____________________________-->
 
-<h1>Index.ejs</h1>
 
-<%= blogs.forEach(function(blog){ %>
-    <div>
-        <h2><%= blog.title %></h2>
-        <img src="<%= blog.image %>">
-        <span><%= blog.created %></spn>
-        <p><%= blog.body%></p>
-    </div>
+<% blogs.forEach(function(blog){ %>
+   <div>
+       <h2><%= blog.title %></h2>
+       <img src="<%= blog.image %>">
+       <span><%= blog.created %></span>
+       <p><%= blog.body %></p>
+   </div>
 <% }) %>
 
+
+
+
+
+
 <!-- _____________________________partial footer___________________________ -->
-<% include ./partials/footer %> <!-- to include partials footer -->
+<% include ./partials/footer %>

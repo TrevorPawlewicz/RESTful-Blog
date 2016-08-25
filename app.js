@@ -19,24 +19,34 @@ var blogSchema = new mongoose.Schema({
 // mongoose will convert Blog into "blogs" in its database
 var Blog = mongoose.model('Blog', blogSchema);
 //-----------------------------------------------------------------------------
+// test-o
+// Blog.create({
+//     title: "Test Blog",
+//     image: "http://www.olmblog.com/wp-content/plugins/wp-o-matic/cache/1a60f83fa6_caution-300x212.jpg",
+//     body: "This is only a test..."
+// });
+
 
 // RESTful ROUTES -------------------------------------------------------------
 //
 app.get('/', function(req, res){
-    res.render('/blogs');
+    res.redirect('/blogs');
 });
-//
+// INDEX route ----------------------------------------------------------------
 app.get('/blogs', function(req, res){
     Blog.find({}, function(err, blogData){
         if (err) {
-            console.log("Error: " + err);
+            console.log(err);
         } else {
-            res.render('index.ejs', {blogs: blogData});
+            res.render('index', {blogs: blogData});
         }
     })
 });
-
-
+// NEW route
+app.get('/blogs/new', function(req, res){
+    res.render('new');
+});
+// CREATE route
 
 
 
