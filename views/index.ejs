@@ -1,6 +1,7 @@
 <% include ./partials/header %>
 <!-- ______^partial header^______navbar location____________________________-->
 
+<h1>Index.ejs</h1>
 
 <!-- _______________________all posted blogs_______________________________ -->
     <% blogs.forEach(function(blog){ %>
@@ -9,6 +10,7 @@
            <img src="<%= blog.image %>">
            <span><%= blog.created %></span>
            <p><%= blog.body %></p>
+           <a href="/blogs/<%= blog._id %>">Read More</a>
        </div>
     <% }) %>
 <!-- _______________________all posted blogs_______________________________ -->
