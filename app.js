@@ -58,6 +58,7 @@ app.post('/blogs', function(req, res){
 });
 // SHOW route
 app.get('/blogs/:id', function(req, res){
+    //   findById is a mongoose method
     Blog.findById(req.params.id, function(err, foundBlog){
         if (err) {
             res.redirect('/blogs');
