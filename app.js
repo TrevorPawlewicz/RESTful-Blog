@@ -1,12 +1,15 @@
-var bodyParser = require('body-parser');
-var mongoose    = require('mongoose');
-var express     = require('express');
-var app         = express();
+var bodyParser     = require('body-parser');
+var methodOverride = require('method-override'); // HTML forms only use GET and POST req
+var mongoose       = require('mongoose');
+var express        = require('express');
+var app            = express();
+
 // APP Config -----------------------------------------------------------------
 mongoose.connect('mongodb://localhost/restful_blog_app'); // for mongo database
 app.set('view engine', 'ejs'); // direct ejs's to view folder
 app.use(express.static('public')); // directs express to our public folder
 app.use(bodyParser.urlencoded({extended: true})); // parses data into JS
+app.use(methodOverride('_method')); // for treating requests as PUT requests
 //-----------------------------------------------------------------------------
 
 // MONGOOSE Model config ------------------------------------------------------
@@ -42,10 +45,12 @@ app.get('/blogs', function(req, res){
         }
     })
 });
+
 // NEW route ------------------------------------------------------------------
 app.get('/blogs/new', function(req, res){
     res.render('new');
 });
+
 // CREATE route ---------------------------------------------------------------
 app.post('/blogs', function(req, res){
     Blog.create(req.body.blog, function(err, newBlog) {
@@ -56,7 +61,8 @@ app.post('/blogs', function(req, res){
         }
     })
 });
-// SHOW route
+
+// SHOW route -----------------------------------------------------------------
 app.get('/blogs/:id', function(req, res){
     //   findById is a mongoose method
     Blog.findById(req.params.id, function(err, foundBlog){
@@ -68,6 +74,63 @@ app.get('/blogs/:id', function(req, res){
         }
     });
 });
+
+// EDIT route -----------------------------------------------------------------
+app.get('/blogs/:id/edit', function(req, res){
+    Blog.findById(req.params.id, function(err, foundBlog){
+        if (err) {
+            res.redirect('/blogs');
+        } else {
+            //                 pass in our info
+            res.render('edit', {blog: foundBlog});
+        }
+    });
+});
+
+// UPDATE route ---------------------------------------------------------------
+app.put('/blogs/:id', function(req, res){
+    //
+    Blog.findByIdAndUpdate(req.params.id, req.body.blog, function(err, updatedBlog){
+        if (err) {
+            res.redirect('/blogs');
+        } else {
+            res.redirect('/blogs/' + req.params.id);
+        }
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //-----------------------------------------------------------------------------
