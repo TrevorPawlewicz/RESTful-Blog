@@ -1,14 +1,16 @@
-var bodyParser     = require('body-parser');
-var methodOverride = require('method-override'); // HTML forms only use GET and POST req
-var mongoose       = require('mongoose');
-var express        = require('express');
-var app            = express();
+var bodyParser       = require('body-parser');
+var methodOverride   = require('method-override'); // HTML forms only use GET and POST req
+var expressSanitizer = require('express-sanitizer'); //
+var mongoose         = require('mongoose');
+var express          = require('express');
+var app              = express();
 
 // APP Config -----------------------------------------------------------------
 mongoose.connect('mongodb://localhost/restful_blog_app'); // for mongo database
 app.set('view engine', 'ejs'); // direct ejs's to view folder
 app.use(express.static('public')); // directs express to our public folder
 app.use(bodyParser.urlencoded({extended: true})); // parses data into JS
+app.use(expressSanitizer); // must go after body-parser
 app.use(methodOverride('_method')); // for treating requests as PUT requests
 //-----------------------------------------------------------------------------
 
@@ -53,6 +55,9 @@ app.get('/blogs/new', function(req, res){
 
 // CREATE route ---------------------------------------------------------------
 app.post('/blogs', function(req, res){
+    // from <textarea name="blog[body]"><%= blog.body %></textarea>
+    req.body.blog.body = req.sanitize(req.body.blog.body); // remove all JS
+
     Blog.create(req.body.blog, function(err, newBlog) {
         if (err) {
             res.render('new');
@@ -89,7 +94,9 @@ app.get('/blogs/:id/edit', function(req, res){
 
 // UPDATE route ---------------------------------------------------------------
 app.put('/blogs/:id', function(req, res){
-    //
+    // from <textarea name="blog[body]"><%= blog.body %></textarea>
+    req.body.blog.body = req.sanitize(req.body.blog.body); // remove all JS
+
     Blog.findByIdAndUpdate(req.params.id, req.body.blog, function(err, updatedBlog){
         if (err) {
             res.redirect('/blogs');
@@ -110,31 +117,7 @@ app.delete('/blogs/:id', function(req, res){
         }
     });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// RESTful ROUTES -------------------------------------------------------------
 
 
 //-----------------------------------------------------------------------------
