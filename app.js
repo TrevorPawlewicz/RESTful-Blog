@@ -10,7 +10,7 @@ mongoose.connect('mongodb://localhost/restful_blog_app'); // for mongo database
 app.set('view engine', 'ejs'); // direct ejs's to view folder
 app.use(express.static('public')); // directs express to our public folder
 app.use(bodyParser.urlencoded({extended: true})); // parses data into JS
-app.use(expressSanitizer); // must go after body-parser
+app.use(expressSanitizer()); // must go after body-parser
 app.use(methodOverride('_method')); // for treating requests as PUT requests
 //-----------------------------------------------------------------------------
 
@@ -39,6 +39,7 @@ app.get('/', function(req, res){
 });
 // INDEX route ----------------------------------------------------------------
 app.get('/blogs', function(req, res){
+    //   find is a mongoose method
     Blog.find({}, function(err, blogData){
         if (err) {
             console.log(err);
@@ -57,7 +58,7 @@ app.get('/blogs/new', function(req, res){
 app.post('/blogs', function(req, res){
     // from <textarea name="blog[body]"><%= blog.body %></textarea>
     req.body.blog.body = req.sanitize(req.body.blog.body); // remove all JS
-
+    //   create is a mongoose method
     Blog.create(req.body.blog, function(err, newBlog) {
         if (err) {
             res.render('new');
@@ -82,6 +83,7 @@ app.get('/blogs/:id', function(req, res){
 
 // EDIT route -----------------------------------------------------------------
 app.get('/blogs/:id/edit', function(req, res){
+    //   findById is a mongoose method
     Blog.findById(req.params.id, function(err, foundBlog){
         if (err) {
             res.redirect('/blogs');
@@ -96,7 +98,7 @@ app.get('/blogs/:id/edit', function(req, res){
 app.put('/blogs/:id', function(req, res){
     // from <textarea name="blog[body]"><%= blog.body %></textarea>
     req.body.blog.body = req.sanitize(req.body.blog.body); // remove all JS
-
+    //   findByIdAndUpdate is a mongoose method
     Blog.findByIdAndUpdate(req.params.id, req.body.blog, function(err, updatedBlog){
         if (err) {
             res.redirect('/blogs');
@@ -108,7 +110,7 @@ app.put('/blogs/:id', function(req, res){
 
 // DESTROY route --------------------------------------------------------------
 app.delete('/blogs/:id', function(req, res){
-    //
+    //   findByIdAndRemove is a mongoose method
     Blog.findByIdAndRemove(req.params.id, function(err){
         if (err) {
             res.redirect('/blogs');
